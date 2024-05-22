@@ -1,6 +1,6 @@
 const Item = require('../models/itemModel');
 
-exports.getItems = async (req, res) => {
+const renderIndex = async (req, res) => {
     try {
         const items = await Item.find();
         res.render('index', { items });
@@ -9,3 +9,5 @@ exports.getItems = async (req, res) => {
         res.status(500).send('Server Error');
     }
 };
+
+module.exports = { renderIndex }

@@ -1,9 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const Item = require('../models/itemModel');  // Update this line
+const { renderIndex } = require('../controllers/itemController');  // Update this line
+const { restrictToLoggedInUsers } = require('../middlewares/auth');
 
 // Create
-router.post('/items', async (req, res) => {
+router.post('/items', restrictToLoggedInUsers, async (req, res) => {
     try {
         const newItem = new Item(req.body);
         await newItem.save();
@@ -14,14 +16,7 @@ router.post('/items', async (req, res) => {
 });
 
 // Read
-router.get('/', async (req, res) => {
-    try {
-        const items = await Item.find();
-        res.render('index', { items: items });
-    } catch (err) {
-        res.status(500).send(err);
-    }
-});
+router.get('/', renderIndex);
 
 // Update
 router.post('/items/update/:id', async (req, res) => {
@@ -46,6 +41,13 @@ router.get('/items/delete/:id', async (req, res) => {
 // Form route
 router.get('/form', (req, res) => {
     res.render('form');
+});
+
+router.get('/signup', (req, res) => {
+    return res.render("signup");
+});
+router.get('/login', (req, res) => {
+    return res.render("login");
 });
 
 module.exports = router;

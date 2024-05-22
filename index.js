@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const itemRoutes = require('./routes/itemRoutes');
+const cookieParser = require('cookie-parser');
+const userRoutes = require('./routes/user');
 const { MongoClient, ServerApiVersion } = require('mongodb');
 require('dotenv').config();
 
@@ -16,12 +18,14 @@ mongoose.connect(uri).then(() =>{
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(cookieParser());
 
 // Set up view engine
 app.set('view engine', 'ejs');
 
 // Routes
-app.use('/', itemRoutes);
+app.use('/',itemRoutes);
+app.use('/user', userRoutes);
 
 // Start the server
 const PORT = process.env.PORT || 3000;
